@@ -4,11 +4,23 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var dotenv = require('dotenv');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 
+dotenv.config();
+var url = process.env.MLAB_URL;
+
 var app = express();
+
+// mongoose --> mongoDB connection
+var mongoose = require('mongoose');
+
+mongoose.connect(url);
+mongoose.Promise = global.Promise;
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,6 +34,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// routes
 app.use('/', index);
 app.use('/users', users);
 
