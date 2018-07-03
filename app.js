@@ -4,8 +4,11 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-// allow access to author model
+
+// allow access to models
 require("./models/author");
+require("./models/book");
+
 var index = require('./routes/index');
 var users = require('./routes/users');
 
@@ -41,8 +44,8 @@ const Schema = mongoose.Schema;
         date_of_death: { type: Date },
 */
 
-var AuthorSchema = require('mongoose').model('Author').schema;
 var authorModel = require('mongoose').model('Author');
+var bookModel = require('mongoose').model('Book');
 
 var author = new authorModel({
   first_name: "Tom",
@@ -50,11 +53,29 @@ var author = new authorModel({
   date_of_birth: "6/22",
   date_of_death: "7/01"
 });
-
 author.save(function (err, model) {
   if (err) throw err;
   console.log("new author saved");
 });
+
+var book = new bookModel({
+  title: "2001",
+  summary: "very good",
+  isbn: "001",
+});
+book.save(function (err, model) {
+  if (err) throw err;
+  console.log("new book saved");
+});
+
+/*
+ title: { type: String, required: true },
+        author: { type: Schema.ObjectId, ref: 'Author', required: false },
+        summary: { type: String, required: true },
+        isbn: { type: String, required: true },
+        genre: [{ type: Schema.ObjectId, ref: 'Genre' }]
+    }
+  */
 
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
