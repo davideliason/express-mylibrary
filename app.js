@@ -56,7 +56,7 @@ var author = new authorModel({
   date_of_death: "7/01",
 });
 // embedded doc
-author.hobbies.push({ name: "reading" });
+author.hobbies.push({ name: "reading", description: "with my kindle" });
 
 author.save(function (err, model) {
   if (err) throw err;

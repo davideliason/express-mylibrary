@@ -3,7 +3,11 @@ var Schema = mongoose.Schema;
 
 var HobbySchema = new Schema(
     {
-        name: String
+        name: String,
+        description: {
+            type: String,
+            required: true
+        }
     }
 );
 
