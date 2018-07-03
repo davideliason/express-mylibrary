@@ -4,11 +4,12 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var dotenv = require('dotenv');
-
+// allow access to author model
+require("./models/author");
 var index = require('./routes/index');
 var users = require('./routes/users');
 
+var dotenv = require('dotenv');
 dotenv.config();
 var url = process.env.MLAB_URL;
 
@@ -23,15 +24,38 @@ var db = mongoose.connection;
 
 // create Schema
 const Schema = mongoose.Schema;
-const mySchema = new Schema({
-  name: String
+// const mySchema = new Schema({
+//   name: { type: String, required: true },
+//   age: { type: Number, min: 18, max: 90, required: true }
+// });
+// // create Model
+// const testModel = db.model('TestModel', mySchema);
+// // create instance
+// const instance = new testModel();
+// instance.name = "David";
+
+/*
+        first_name: { type: String, required: true, max: 100 },
+        family_name: { type: String, required: true, max: 100 },
+        date_of_birth: { type: Date },
+        date_of_death: { type: Date },
+*/
+
+var AuthorSchema = require('mongoose').model('Author').schema;
+var authorModel = require('mongoose').model('Author');
+
+var author = new authorModel({
+  first_name: "Tom",
+  family_name: "Ka",
+  date_of_birth: "6/22",
+  date_of_death: "7/01"
 });
-// create Model
-const testModel = db.model('TestModel', mySchema);
-// create instance
-const instance = new testModel();
-instance.name = "David";
-instance.save();
+
+author.save(function (err, model) {
+  if (err) throw err;
+  console.log("new author saved");
+});
+
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
