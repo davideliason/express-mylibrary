@@ -8,6 +8,8 @@ var bodyParser = require('body-parser');
 // allow access to models
 require("./models/author");
 require("./models/book");
+// require("./models/hobby");
+
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -48,15 +50,19 @@ var authorModel = require('mongoose').model('Author');
 var bookModel = require('mongoose').model('Book');
 
 var author = new authorModel({
-  first_name: "Tom",
+  first_name: "Jim",
   family_name: "Ka",
   date_of_birth: "6/22",
-  date_of_death: "7/01"
+  date_of_death: "7/01",
 });
+// embedded doc
+author.hobbies.push({ name: "reading" });
+
 author.save(function (err, model) {
   if (err) throw err;
   console.log("new author saved");
 });
+
 
 var book = new bookModel({
   title: "2001",
@@ -66,11 +72,12 @@ var book = new bookModel({
 book.save(function (err, model) {
   if (err) throw err;
   console.log("new book saved");
+  authorModel.find({}, (err, docs) => {
+    console.log(docs);
+  });
 });
 
-bookModel.find({}, (err, docs) => {
-  console.log(docs);
-});
+
 /*
  title: { type: String, required: true },
         author: { type: Schema.ObjectId, ref: 'Author', required: false },
