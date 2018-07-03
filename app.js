@@ -16,10 +16,23 @@ var app = express();
 
 // mongoose --> mongoDB connection
 var mongoose = require('mongoose');
-
 mongoose.connect(url);
 mongoose.Promise = global.Promise;
+// Connection instance
 var db = mongoose.connection;
+
+// create Schema
+const Schema = mongoose.Schema;
+const mySchema = new Schema({
+  name: String
+});
+// create Model
+const testModel = db.model('TestModel', mySchema);
+// create instance
+const instance = new testModel();
+instance.name = "David";
+instance.save();
+
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // view engine setup
