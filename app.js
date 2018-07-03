@@ -68,6 +68,9 @@ book.save(function (err, model) {
   console.log("new book saved");
 });
 
+bookModel.find({}, (err, docs) => {
+  console.log(docs);
+});
 /*
  title: { type: String, required: true },
         author: { type: Schema.ObjectId, ref: 'Author', required: false },
